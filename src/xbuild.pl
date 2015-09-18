@@ -599,10 +599,14 @@ sub debug {
 		return;
 	}
 	my $msg = shift;
-	if (!defined $msg || length($msg) == 0) {
-		return;
+	my @lines = split /\n/, $msg;
+	LINES_LOOP:
+	foreach my $line (@lines) {
+		if (length($line) == 0) {
+			next LINES_LOOP;
+		}
+		print " [debug]  $line\n";
 	}
-	print " [debug]  $msg\n";
 }
 sub error {
 	my $msg = shift;
