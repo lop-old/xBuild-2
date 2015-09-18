@@ -247,30 +247,35 @@ EOF
 }
 sub goal_version {
 print "Updating version..\n";
+error ("Sorry, this goal is unfinished!");
 }
 
 
 
 sub goal_maven {
 print "Building with maven..\n";
+error ("Sorry, this goal is unfinished!");
 }
 
 
 
 sub goal_gradle {
 print "Building with gradle..\n";
+error ("Sorry, this goal is unfinished!");
 }
 
 
 
 sub goal_rpm {
 print "Building rpm..\n";
+error ("Sorry, this goal is unfinished!");
 }
 
 
 
 sub goal_composer {
 print "Building with composer..\n";
+error ("Sorry, this goal is unfinished!");
 }
 
 
