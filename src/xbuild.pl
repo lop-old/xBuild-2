@@ -40,7 +40,7 @@ use Data::Dumper;
 
 
 our $project_config_file = 'xbuild.json';
-our $global_default_goals = 'clean prep';
+our $global_default_goals = 'clean';
 
 
 
