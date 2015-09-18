@@ -1,5 +1,6 @@
 {
 	"Name": "xBuild",
+	"GitIgnore Append": [],
 	"Default Goals": "clean rpm",
 	"Version Files": [
 		"xBuild.spec"

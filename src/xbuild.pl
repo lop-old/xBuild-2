@@ -105,6 +105,8 @@ while (my $arg = shift(@ARGV)) {
 our $config = load_xbuild_json();
 
 our $project_name          = $config->{Name};
+# gitignore append
+our @project_gitignore_append = @{$config->{'GitIgnore Append'}};
 our @project_default_goals;
 {
 	my $default_goals = $config->{'Default Goals'};
@@ -177,7 +179,56 @@ sub goal_clean {
 
 
 sub goal_prep {
-	print "Prep..\n";
+	my $filename = '.gitignore';
+	my $data = <<EOF;
+**/.project
+**/.classpath
+**/.settings/
+**/nbproject/
+
+.git/
+**/target/
+**/rpmbuild-root/
+**/build/
+**/bin/
+**/out/
+
+*.zip
+*.exe
+*.rpm
+*.jar
+*.war
+*.ear
+*.class
+*.iml
+*.idea
+*.lock
+*.out
+
+*.swp
+.*.swp
+*~
+EOF
+	# append custom filenames
+	my $first = 1;
+	APPEND_LOOP:
+	foreach $filename (@project_gitignore_append) {
+		if (!defined $filename || length($filename) == 0) {
+			next APPEND_LOOP;
+		}
+		if ($first == 1) {
+			$first = 0;
+			$data .= "\n# Custom\n# ======\n\n";
+		}
+		$data .= "$filename\n";
+	}
+	print "Creating file: .gitignore\n";
+	open (my $FILE, '>', $filename) or error ("Failed to write to file: $filename");
+	print $FILE "#  Auto Generated File\n";
+	print $FILE "# =====================\n\n";
+	print $FILE $data;
+	close $FILE;
+}
 }
 
 
