@@ -136,9 +136,9 @@ our $project_version = parse_version_from_files(@project_version_files);
 
 # display info
 big_title ("Project: $project_name\nVersion: $project_version");
-print " Name:    $project_name\n";
-print " Version: $project_version\n";
-print "\n";
+#print " Name:    $project_name\n";
+#print " Version: $project_version\n";
+#print "\n";
 print " Default Goals:    "; print join ", ", @project_default_goals; print "\n";
 print " Performing Goals: "; print join ", ", @goals; print "\n";
 
@@ -287,6 +287,8 @@ error ("Sorry, this goal is unfinished!");
 sub goal_maven {
 print "Building with maven..\n";
 error ("Sorry, this goal is unfinished!");
+	# ensure tools are available
+	system 'which mvn >/dev/null || { echo "Composer is not available - yum install maven"; exit 1; }';
 }
 
 
@@ -294,6 +296,9 @@ error ("Sorry, this goal is unfinished!");
 sub goal_gradle {
 print "Building with gradle..\n";
 error ("Sorry, this goal is unfinished!");
+	# ensure tools are available
+	system 'which gradle >/dev/null || { echo "Composer is not available - yum install gradle"; exit 1; }';
+
 }
 
 
