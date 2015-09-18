@@ -79,3 +79,4 @@ fi
 %files
 %defattr(-,root,root,-)
 %{prefix}/xbuild.pl
+%{_bindir}/xbuild
