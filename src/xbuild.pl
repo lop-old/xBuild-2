@@ -40,6 +40,7 @@ use Data::Dumper;
 
 
 our $project_config_file = 'xbuild.json';
+our $global_default_goals = 'clean prep';
 
 
 
@@ -104,7 +105,14 @@ while (my $arg = shift(@ARGV)) {
 our $config = load_xbuild_json();
 
 our $project_name          = $config->{Name};
-our @project_default_goals = split / /, $config->{'Default Goals'};
+our @project_default_goals;
+{
+	my $default_goals = $config->{'Default Goals'};
+	if (!defined $default_goals || length($default_goals) == 0) {
+		$default_goals = $global_default_goals;
+	}
+	@project_default_goals = split / /, $default_goals;
+}
 
 our @project_version_files = @{$config->{'Version Files'}};
 our $project_version = parse_version_from_files(@project_version_files);
@@ -135,9 +143,15 @@ for my $goal (@goals) {
 	switch ($goal) {
 		case 'clean' {
 			small_title ("$project_title\nGoal: $goal");
+			goal_clean ();
+		}
+		case 'prep' {
+			small_title ("$project_title\nGoal: $goal");
+			goal_prep ();
 		}
 		case 'rpm' {
 			small_title ("$project_title\nGoal: $goal");
+			goal_rpm ();
 		}
 		else {
 			error ("Unknown goal: $goal");
@@ -149,6 +163,28 @@ for my $goal (@goals) {
 
 print "\n FINISHED!\n\n";
 exit 0;
+
+
+
+##################################################
+
+
+
+sub goal_clean {
+	print "Cleaning..\n";
+}
+
+
+
+sub goal_prep {
+	print "Prep..\n";
+}
+
+
+
+sub goal_rpm {
+	print "Building..\n";
+}
 
 
 

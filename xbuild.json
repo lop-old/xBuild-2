@@ -1,6 +1,6 @@
 {
 	"Name": "xBuild",
-	"Default Goals": "clean rpm",
+	"Default Goals": "clean prep rpm",
 	"Version Files": [
 		"xBuild.spec"
 	],
