@@ -155,9 +155,21 @@ for my $goal (@goals) {
 			small_title ("$project_title\nGoal: $goal");
 			goal_prep ();
 		}
+		case 'maven' {
+			small_title ("$project_title\nGoal: $goal");
+			goal_maven ();
+		}
+		case 'gradle' {
+			small_title ("$project_title\nGoal: $goal");
+			goal_gradle ();
+		}
 		case 'rpm' {
 			small_title ("$project_title\nGoal: $goal");
 			goal_rpm ();
+		}
+		case 'composer' {
+			small_title ("$project_title\nGoal: $goal");
+			goal_composer ();
 		}
 		else {
 			error ("Unknown goal: $goal");
@@ -234,14 +246,31 @@ EOF
 	close $FILE;
 }
 sub goal_version {
+print "Updating version..\n";
+}
 
 
+
+sub goal_maven {
+print "Building with maven..\n";
+}
+
+
+
+sub goal_gradle {
+print "Building with gradle..\n";
 }
 
 
 
 sub goal_rpm {
-	print "Building..\n";
+print "Building rpm..\n";
+}
+
+
+
+sub goal_composer {
+print "Building with composer..\n";
 }
 
 
