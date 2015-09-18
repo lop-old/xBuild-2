@@ -1,0 +1,20 @@
+{
+	"Name": "xBuild",
+	"Default Goals": "clean rpm",
+	"Version Files": [
+		"xBuild.spec"
+	],
+	"Goals": [
+		{
+			"Type": "clean"
+		},{
+			"Type": "rpm",
+			"Arch": "noarch"
+		},{
+			"Type": "deploy",
+			"Files": [
+				"target/<BUILD_NAME>-<BUILD_VERSION>-1.noarch.rpm"
+			]
+		}
+	]
+}
