@@ -39,7 +39,7 @@ use Data::Dumper;
 
 
 
-our $project_config_file = 'xbuild.json';
+our $project_config_file  = 'xbuild.json';
 our $global_default_goals = 'clean';
 
 
@@ -104,9 +104,13 @@ while (my $arg = shift(@ARGV)) {
 # load xbuild.json config
 our $config = load_xbuild_json();
 
-our $project_name          = $config->{Name};
+# project name
+our $project_name = $config->{Name};
+
 # gitignore append
 our @project_gitignore_append = @{$config->{'GitIgnore Append'}};
+
+# default goals
 our @project_default_goals;
 {
 	my $default_goals = $config->{'Default Goals'};
@@ -115,13 +119,13 @@ our @project_default_goals;
 	}
 	@project_default_goals = split / /, $default_goals;
 }
-
-our @project_version_files = @{$config->{'Version Files'}};
-our $project_version = parse_version_from_files(@project_version_files);
-
 if ( (0+@goals) == 0 ) {
 	@goals = @project_default_goals;
 }
+
+# version files
+our @project_version_files = @{$config->{'Version Files'}};
+our $project_version = parse_version_from_files(@project_version_files);
 
 
 
@@ -163,7 +167,7 @@ for my $goal (@goals) {
 
 
 
-print "\n FINISHED!\n\n";
+print "\n\n FINISHED!\n\n";
 exit 0;
 
 
@@ -229,6 +233,9 @@ EOF
 	print $FILE $data;
 	close $FILE;
 }
+sub goal_version {
+
+
 }
 
 
@@ -330,7 +337,7 @@ sub parse_version_file {
 				return $vers;
 			}
 		}
-		close (FILE);
+		close FILE;
 		error ("Missing Version field in file: $file");
 		exit 1;
 	}
@@ -348,7 +355,7 @@ sub parse_version_file {
 				return $vers;
 			}
 		}
-		close (FILE);
+		close FILE;
 		error ("Missing <version> tag in file: $file");
 		exit 1;
 	}
