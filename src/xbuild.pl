@@ -120,8 +120,7 @@ if ( (0+@goals) == 0 ) {
 
 
 # display info
-my $project_title = "Project: $project_name\nVersion: $project_version";
-title ($project_title);
+big_title ("Project: $project_name\nVersion: $project_version");
 print " Name:    $project_name\n";
 print " Version: $project_version\n";
 print "\n";
@@ -131,13 +130,14 @@ print " Performing Goals: "; print join ", ", @goals; print "\n";
 
 
 # perform goals
+my $project_title = "$project_name $project_version";
 for my $goal (@goals) {
 	switch ($goal) {
 		case 'clean' {
-			title ("$project_title\n\nGoal: $goal");
+			small_title ("$project_title\nGoal: $goal");
 		}
 		case 'rpm' {
-			title ("$project_title\n\nGoal: $goal");
+			small_title ("$project_title\nGoal: $goal");
 		}
 		else {
 			error ("Unknown goal: $goal");
@@ -277,6 +277,39 @@ sub parse_version_file {
 
 
 sub title {
+	big_title ( shift );
+}
+sub small_title {
+	my $title = shift;
+	my @lines = split /\n/, $title;
+	my $maxlen = 0;
+	LINES_LOOP:
+	foreach my $line (@lines) {
+		my $len = length($line);
+		if ($len == 0) {
+			next LINES_LOOP;
+		}
+		if ($len > $maxlen) {
+			$maxlen = $len;
+		}
+	}
+	if ($maxlen == 0) {
+		return;
+	}
+	my $full  = ( '*' x ($maxlen + 8) );
+	my $blank = ( ' ' x $maxlen );
+	print "\n\n";
+	print " $full \n";
+	foreach my $line (@lines) {
+		my $padding = $maxlen - length($line);
+		my $padfront = ( ' ' x floor ($padding / 2) );
+		my $padend   = ( ' ' x ceil  ($padding / 2) );
+		print " **  $padfront$line$padend  ** \n";
+	}
+	print " $full \n";
+	print "\n";
+}
+sub big_title {
 	my $title = shift;
 	my @lines = split /\n/, $title;
 	my $maxlen = 0;
@@ -310,6 +343,9 @@ sub title {
 	print " $full \n";
 	print "\n";
 }
+
+
+
 sub debug {
 	if ($debug != 1) {
 		return;
