@@ -132,6 +132,17 @@ if ( (0+@goals) == 0 ) {
 	@goals = @project_default_goals;
 }
 
+{
+	my $PWD = '/media/gwork/xBuild/src';
+	require "$PWD/goals/clean.pl";
+	require "$PWD/goals/composer.pl";
+	require "$PWD/goals/deploy.pl";
+	require "$PWD/goals/gradle.pl";
+	require "$PWD/goals/maven.pl";
+	require "$PWD/goals/prep.pl";
+	require "$PWD/goals/rpm.pl";
+}
+
 # version files
 @project_version_files = @{$config->{'Version Files'}};
 $project_version = parse_version_from_files(@project_version_files);
@@ -194,226 +205,6 @@ for my $goal (@goals) {
 
 small_title (" \nFINISHED!\n ");
 exit 0;
-
-
-
-##################################################
-
-
-
-sub goal_clean {
-	print "Cleaning..\n";
-	my $pwd = getcwd;
-	foreach my $dir ( 'target', 'rpmbuild-root', 'build', 'bin', 'out' ) {
-		my $path = "$pwd/$dir/";
-		if ( -d "$path" ) {
-			debug ("deleting path: $path");
-			system ("[ -z \"$path\" ] || rm -Rf --preserve-root \"$path\" || exit 1");
-		}
-	}
-}
-
-
-
-sub goal_prep {
-	my $pwd = getcwd;
-	# generate .gitignore file
-	{
-		my $filename = '.gitignore';
-		my $data = <<EOF;
-**/.project
-**/.classpath
-**/.settings/
-**/nbproject/
-
-.git/
-**/target/
-**/rpmbuild-root/
-**/build/
-**/bin/
-**/out/
-
-*.zip
-*.exe
-*.rpm
-*.jar
-*.war
-*.ear
-*.class
-*.iml
-*.idea
-*.lock
-*.out
-
-*.swp
-.*.swp
-*~
-EOF
-		# append custom filenames
-		my $first = 1;
-		APPEND_LOOP:
-		foreach $filename (@project_gitignore_append) {
-			if (!defined $filename || length($filename) == 0) {
-				next APPEND_LOOP;
-			}
-			if ($first == 1) {
-				$first = 0;
-				$data .= "\n# Custom\n# ======\n\n";
-			}
-			$data .= "$filename\n";
-		}
-		print "Creating file: .gitignore\n";
-		open (my $FILE, '>', "$pwd/$filename") or error ("Failed to write to file: $filename");
-		print $FILE "#  Auto Generated File\n";
-		print $FILE "# =====================\n\n";
-		print $FILE $data;
-		close $FILE;
-	}
-#	# update composer
-#	if ( -f "$pwd/composer.json" ) {
-#		my $cmd = "composer self-update || { echo \"Failed to update composer!\"; exit 1; }";
-#		system $cmd;
-#	}
-
-	# composer install
-	{
-		my $path = "$pwd";
-		print "Composer update: $path\n";
-		my $cmd = <<EOF;
-pushd "$path" && \\
-php `which composer` update -v --working-dir "$path/" || \\
-{ echo "Failed to run composer install command: $path/"; exit 1; }
-popd
-EOF
-		debug ("COMMAND:\n$cmd");
-		system $cmd;
-	}
-}
-sub goal_version {
-print "Updating version..\n";
-error ("Sorry, this goal is unfinished!");
-}
-
-
-
-sub goal_maven {
-print "Building with maven..\n";
-error ("Sorry, this goal is unfinished!");
-	# ensure tools are available
-	system 'which mvn >/dev/null || { echo "Composer is not available - yum install maven"; exit 1; }';
-}
-
-
-
-sub goal_gradle {
-print "Building with gradle..\n";
-error ("Sorry, this goal is unfinished!");
-	# ensure tools are available
-	system 'which gradle >/dev/null || { echo "Composer is not available - yum install gradle"; exit 1; }';
-
-}
-
-
-
-sub goal_rpm {
-	# ensure tools are available
-	system 'which rpmbuild >/dev/null || { echo "Composer is not available - yum install rpm-build"; exit 1; }';
-	my $pwd = getcwd;
-	my $RPM_SPEC   = "$project_name.spec";
-	my $BUILD_ROOT = "$pwd/rpmbuild-root";
-	my $RPM_SOURCE = "$pwd";
-	my $ARCH       = "noarch";
-my $BUILD_NUMBER = 0;
-#my $SOURCE_PATH = "$BUILD_ROOT/";
-#my $SOURCE_FILE = "";
-	if ( ! -f "$pwd/$RPM_SPEC" ) {
-		error ("Spec file not found: $RPM_SPEC");
-		exit 1;
-	}
-	debug ("Found spec file: $RPM_SPEC");
-	# create build space
-	debug ("Creating directory: rpmbuild-root/");
-	mkdir "$BUILD_ROOT/" unless -d "$BUILD_ROOT/";
-	foreach my $dir ( 'BUILD', 'BUILDROOT', 'RPMS', 'SOURCE', 'SOURCES', 'SPECS', 'SRPMS', 'tmp' ) {
-		debug ("Creating directory: rpmbuild-root/$dir/");
-		mkdir "$BUILD_ROOT/$dir/" unless -d "$BUILD_ROOT/$dir/";
-	}
-	copy ( "$pwd/$RPM_SPEC", "$BUILD_ROOT/SPECS/" ) or error ("Failed to copy .spec file!");
-#	# copy source file
-#	if ($SOURCE_PATH ne "$BUILD_ROOT/SOURCES/") {
-#		copy ( "$SOURCE_PATH$SOURCE_FILE", "$BUILD_ROOT/SOURCES/" ) or error ("Failed to copy source file: $SOURCE_FILE");
-#	}
-#	if (length($SOURCE_PATH) == 0) {
-#		$SOURCE_PATH
-#	}
-
-	# build rpm
-	{
-		my $cmd = <<EOF;
-rpmbuild -bb \\
-	--target $ARCH \\
-	--define="_topdir $BUILD_ROOT" \\
-	--define="_tmppath $BUILD_ROOT/tmp" \\
-	--define="SOURCE_ROOT $RPM_SOURCE" \\
-	--define="_rpmdir $pwd/target" \\
-	--define="BUILD_NUMBER $BUILD_NUMBER" \\
-	"$BUILD_ROOT/SPECS/$RPM_SPEC" \\
-		|| exit 1
-EOF
-		debug ("COMMAND:\n$cmd");
-		system $cmd;
-	}
-}
-
-
-
-sub goal_composer {
-error ("Sorry, this goal is unfinished!");
-	# ensure tools are available
-	system 'which php      >/dev/null || { echo "PHP is not available - yum install php56w"; exit 1; }';
-	system 'which composer >/dev/null || { echo "Composer is not available - yum install php-tools"; exit 1; }';
-
-	my $pwd = getcwd;
-	my $path = "$pwd";
-	if ( ! -d "$path/" ) {
-		error ("Composer workspace not found: $path/");
-		exit 1;
-	}
-	if ( ! -f "$path/composer.json" ) {
-		error ("composer.json file not found: $path/");
-		exit 1;
-	}
-
-	# composer install
-	{
-		my $path = "$pwd";
-		print "Composer update: $path\n";
-		my $cmd = <<EOF;
-pushd "$path" && \\
-php `which composer` update -v --working-dir "$path/" || \\
-{ echo "Failed to run composer install command: $path/"; exit 1; }
-popd
-EOF
-		debug ("COMMAND:\n$cmd");
-		system $cmd;
-		# run phpunit if available
-		if ( -f "$path/vendor/bin/phpunit" ) {
-			my $cmd = <<EOF;
-pushd "$path" && \\
-php "$path/vendor/bin/phpunit" \\
-	--coverage-html="$path/coverage/html/" \\
-	--coverage-php="$path/coverage/coverage.php/" \\
-	--coverage-text="$path/coverage/coverage.txt" \\
-	--coverage-xml="$path/coverage/xml/" || \\
-{ echo "Failed to run composer install command: $path/"; exit 1; }
-popd
-EOF
-			debug ("COMMAND:\n$cmd");
-			system $cmd;
-		}
-	}
-
-}
 
 
 
@@ -494,43 +285,14 @@ sub parse_version_from_files {
 sub parse_version_file {
 	my $file = shift;
 	my $ext  = shift;
-
 	# .spec
 	if ($ext eq '.spec') {
-		debug ("Parsing file: $file");
-		open (FILE, $file) or error ("Failed to read file: $file");
-		while (my $line = <FILE>) {
-			$line =~ /Version\s*\:\s*(\d+\.\d+\.\d+(\.\d+)?)/g || next;
-			my ($vers) = ($1);
-			if (defined $vers && length($vers) > 0) {
-				close (FILE);
-				debug ("Parsed version: $vers");
-				return $vers;
-			}
-		}
-		close FILE;
-		error ("Missing Version field in file: $file");
-		exit 1;
+		return &parse_version_file_spec ($file);
 	}
-
 	# pom.xml
 	if ($file =~ /\/pom\.xml$/) {
-		debug ("Parsing file: $file");
-		open (FILE, $file) or die "Failed to read file: $file";
-		while (my $line = <FILE>) {
-			$line =~ /\s*\<version\>(\d+\.\d+\.\d+(\.\d+)?)\<\/version\>/g || next;
-			my ($vers) = ($1);
-			if (defined $vers && length($vers) > 0) {
-				close (FILE);
-				debug ("Parsed version: $vers");
-				return $vers;
-			}
-		}
-		close FILE;
-		error ("Missing <version> tag in file: $file");
-		exit 1;
+		return &parse_version_file_pom_xml ($file);
 	}
-
 	error ("Unknown file type: $file");
 	exit 1;
 }
