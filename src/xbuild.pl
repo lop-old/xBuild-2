@@ -152,30 +152,34 @@ print " Performing Goals: "; print join ", ", @goals; print "\n";
 # perform goals
 my $project_title = "$project_name $project_version";
 for my $goal (@goals) {
+	small_title ("$project_title\nGoal: $goal");
+	if(! exists $config->{Goals}->{$goal}) {
+		error ("Goal '$goal' not configured in $project_config_file project config!");
+		exit 1;
+	}
+	my $goal_config = $config->{Goals}->{$goal};
+	# find goal to run
 	switch ($goal) {
 		case 'clean' {
-			small_title ("$project_title\nGoal: $goal");
-			goal_clean ();
+			goal_clean ($goal_config);
 		}
 		case 'prep' {
-			small_title ("$project_title\nGoal: $goal");
-			goal_prep ();
-		}
-		case 'maven' {
-			small_title ("$project_title\nGoal: $goal");
-			goal_maven ();
+			goal_prep ($goal_config);
 		}
 		case 'gradle' {
-			small_title ("$project_title\nGoal: $goal");
-			goal_gradle ();
+			goal_gradle ($goal_config);
+		}
+		case 'maven' {
+			goal_maven ($goal_config);
+		}
+		case 'gradle' {
+			goal_gradle ($goal_config);
 		}
 		case 'rpm' {
-			small_title ("$project_title\nGoal: $goal");
-			goal_rpm ();
+			goal_rpm ($goal_config);
 		}
 		case 'composer' {
-			small_title ("$project_title\nGoal: $goal");
-			goal_composer ();
+			goal_composer ($goal_config);
 		}
 		else {
 			error ("Unknown goal: $goal");
@@ -185,7 +189,7 @@ for my $goal (@goals) {
 
 
 
-print "\n\n FINISHED!\n\n";
+small_title (" \nFINISHED!\n ");
 exit 0;
 
 
