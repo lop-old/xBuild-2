@@ -51,6 +51,8 @@ our $global_default_goals = 'clean';
 
 our $debug = 0;
 
+our $project_name    = "";
+our $project_version = "";
 our @goals = ();
 
 
@@ -106,7 +108,10 @@ while (my $arg = shift(@ARGV)) {
 our $config = load_xbuild_json();
 
 # project name
-our $project_name = $config->{Name};
+$project_name = $config->{Name};
+
+# project version
+$project_version = $config->{Version};
 
 # gitignore append
 our @project_gitignore_append = @{$config->{'GitIgnore Append'}};
@@ -126,7 +131,7 @@ if ( (0+@goals) == 0 ) {
 
 # version files
 our @project_version_files = @{$config->{'Version Files'}};
-our $project_version = parse_version_from_files(@project_version_files);
+$project_version = parse_version_from_files(@project_version_files);
 
 
 
