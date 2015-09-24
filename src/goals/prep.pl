@@ -5,7 +5,7 @@ use warnings;
 
 sub goal_prep {
 	my $goal_config = shift;
-	my $pwd = getcwd;
+	my $PWD = getcwd;
 	# generate .gitignore file
 	{
 		my $filename = '.gitignore';
@@ -53,33 +53,33 @@ EOF
 			}
 			$data .= "$filename\n";
 		}
-		}
 		print "Creating file: .gitignore\n";
-		open (my $FILE, '>', "$pwd/$filename") or error ("Failed to write to file: $filename");
+		open (my $FILE, '>', "$PWD/$filename") or error ("Failed to write to file: $filename");
 		print $FILE "#  Auto Generated File\n";
 		print $FILE "# =====================\n\n";
 		print $FILE $data;
 		close $FILE;
+		}
 	}
 #	# update composer
-#	if ( -f "$pwd/composer.json" ) {
+#	if ( -f "$PWD/composer.json" ) {
 #		my $cmd = "composer self-update || { echo \"Failed to update composer!\"; exit 1; }";
 #		system $cmd;
 #	}
 
-	# composer install
-	{
-		my $path = "$pwd";
-		print "Composer update: $path\n";
-		my $cmd = <<EOF;
-pushd "$path" && \\
-php `which composer` update -v --working-dir "$path/" || \\
-{ echo "Failed to run composer install command: $path/"; exit 1; }
-popd
-EOF
-		debug ("COMMAND:\n$cmd");
-		system $cmd;
-	}
+#	# composer install
+#	{
+#		my $path = "$PWD";
+#		print "Composer update: $path\n";
+#		my $cmd = <<EOF;
+#pushd "$path" && \\
+#php `which composer` update -v --working-dir "$path/" || \\
+#{ echo "Failed to run composer install command: $path/"; exit 1; }
+#popd
+#EOF
+#		debug ("COMMAND:\n$cmd");
+#		system $cmd;
+#	}
 }
 
 
