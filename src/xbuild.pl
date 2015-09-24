@@ -54,6 +54,7 @@ our $config;
 
 our $project_name    = "";
 our $project_version = "";
+our $project_build_number = 'x';
 our @goals = ();
 our @project_default_goals;
 our @project_version_files;
@@ -65,6 +66,9 @@ ARGS_LOOP:
 while (my $arg = shift(@ARGV)) {
 	if ( $arg =~ /^\-/ ) {
 		switch ($arg) {
+			case '-n' {
+				$arg = '--build-number';
+			}
 			case '-d' {
 				$arg = '--debug';
 			}
@@ -76,12 +80,17 @@ while (my $arg = shift(@ARGV)) {
 			}
 		} # /ALIAS_LOOP
 		switch ($arg) {
+			case '--build-number' {
+				$project_build_number = shift(@ARGV);
+			}
 			case '--debug' {
 				$debug = 1;
 			}
 			case '--help' {
 				print "Usage: xbuild [-hv] [GOAL]...\n";
 				print "Reads a xbuild.json config file from a project and performs build goals.\n";
+				print "\n";
+				print "  -n, --build-number  set the build number\n";
 				print "\n";
 				print "  -d, --debug    debug mode, most verbose logging\n";
 				print "\n";
