@@ -55,7 +55,6 @@ our $config;
 our $project_name    = "";
 our $project_version = "";
 our @goals = ();
-our @project_gitignore_append;
 our @project_default_goals;
 our @project_version_files;
 
@@ -116,9 +115,6 @@ $project_name = $config->{Name};
 
 # project version
 $project_version = $config->{Version};
-
-# gitignore append
-@project_gitignore_append = @{$config->{'GitIgnore Append'}};
 
 # default goals
 {

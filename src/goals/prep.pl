@@ -4,6 +4,7 @@ use warnings;
 
 
 sub goal_prep {
+	my $goal_config = shift;
 	my $pwd = getcwd;
 	# generate .gitignore file
 	{
@@ -38,6 +39,8 @@ sub goal_prep {
 *~
 EOF
 		# append custom filenames
+		if (exists $goal_config->{'GitIgnore Append'}) {
+			my @project_gitignore_append = @{$goal_config->{'GitIgnore Append'}};
 		my $first = 1;
 		APPEND_LOOP:
 		foreach $filename (@project_gitignore_append) {
@@ -49,6 +52,7 @@ EOF
 				$data .= "\n# Custom\n# ======\n\n";
 			}
 			$data .= "$filename\n";
+		}
 		}
 		print "Creating file: .gitignore\n";
 		open (my $FILE, '>', "$pwd/$filename") or error ("Failed to write to file: $filename");
