@@ -11,7 +11,8 @@ error ("Sorry, this goal is unfinished!");
 	my $RPM_SPEC   = "${main::project_name}.spec";
 	my $BUILD_ROOT = "$PWD/rpmbuild-root";
 	my $RPM_SOURCE = "$PWD";
-	my $ARCH       = "noarch";
+#	@{$config->{'Version Files'}};
+	my $RPM_ARCH   = "noarch";
 my $BUILD_NUMBER = 0;
 #my $SOURCE_PATH = "$BUILD_ROOT/";
 #my $SOURCE_FILE = "";
@@ -40,7 +41,7 @@ my $BUILD_NUMBER = 0;
 	{
 		my $cmd = <<EOF;
 rpmbuild -bb \\
-	--target $ARCH \\
+	--target="$RPM_ARCH" \\
 	--define="_topdir $BUILD_ROOT" \\
 	--define="_tmppath $BUILD_ROOT/tmp" \\
 	--define="SOURCE_ROOT $RPM_SOURCE" \\

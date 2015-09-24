@@ -5,11 +5,18 @@ use warnings;
 
 sub goal_prep {
 	my $goal_config = shift;
+	goal_prep_gen_gitignore ($goal_config);
+#	goal_prep_composer      ($goal_config);
+}
+
+
+
+# generate .gitignore file
+sub goal_prep_gen_gitignore {
+	my $goal_config = shift;
+	my $filename = '.gitignore';
 	my $PWD = getcwd;
-	# generate .gitignore file
-	{
-		my $filename = '.gitignore';
-		my $data = <<EOF;
+	my $data = <<EOF;
 **/.project
 **/.classpath
 **/.settings/
@@ -38,9 +45,9 @@ sub goal_prep {
 .*.swp
 *~
 EOF
-		# append custom filenames
-		if (exists $goal_config->{'GitIgnore Append'}) {
-			my @project_gitignore_append = @{$goal_config->{'GitIgnore Append'}};
+	# append custom filenames
+	if (exists $goal_config->{'GitIgnore Append'}) {
+		my @project_gitignore_append = @{$goal_config->{'GitIgnore Append'}};
 		my $first = 1;
 		APPEND_LOOP:
 		foreach $filename (@project_gitignore_append) {
@@ -59,8 +66,12 @@ EOF
 		print $FILE "# =====================\n\n";
 		print $FILE $data;
 		close $FILE;
-		}
 	}
+}
+
+
+
+#sub goal_prep_composer {
 #	# update composer
 #	if ( -f "$PWD/composer.json" ) {
 #		my $cmd = "composer self-update || { echo \"Failed to update composer!\"; exit 1; }";
@@ -80,7 +91,7 @@ EOF
 #		debug ("COMMAND:\n$cmd");
 #		system $cmd;
 #	}
-}
+#}
 
 
 
