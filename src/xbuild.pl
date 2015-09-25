@@ -69,6 +69,8 @@ our @goals_main  = ();
 our @goals_build = ();
 our @project_version_files;
 
+our $USER = $ENV{USER};
+
 our $PWD = getcwd;
 if (length($PWD) == 0) {
 	print "Failed to get current working directory!";
@@ -268,6 +270,7 @@ print " Build: "; print join ", ", @goals_build; print "\n";
 
 
 
+print " User: $USER\n";
 my $project_title = "$project_name $project_version $project_build_number";
 if (0+@goals_main == 0) {
 	error ("No main goals to perform..\n");
