@@ -44,7 +44,11 @@ use Data::Dumper;
 
 our $project_config_file  = 'xBuild.json';
 our $global_default_goals = 'clean';
-my $GOAL_SCRIPT_PATH = "/usr/bin/xbuild-goals";
+my  $SCRIPT_PATH      = "/usr/bin/xBuild";
+my  $GOAL_SCRIPT_PATH = "$SCRIPT_PATH/goals";
+
+require "$SCRIPT_PATH/tools.pl";
+
 
 
 ##################################################
@@ -118,11 +122,6 @@ while (my $arg = shift(@ARGV)) {
 
 
 
-sub bin_file_exists {
-	my $filename = shift;
-	system ("which $filename >/dev/null || { echo \"Composer is not available - yum install rpm-build\"; exit 1; }")
-		and error ("'which' command failed!");
-}
 
 
 

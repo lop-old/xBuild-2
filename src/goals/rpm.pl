@@ -17,9 +17,9 @@ sub goal_rpm {
 	# ensure tools are available
 	bin_file_exists ("rpmbuild");
 	# build multi-arch
-	if (index($arch, ',') != -1) {
+	if (index($arch, ',') != -1 || index($arch, ' ') != -1) {
 		ARCH_LOOP:
-		for $a ( split (/\,[\s]*/, $arch) ) {
+		for $a ( split_comma ($arch) ) {
 			if (length($a) == 0) {
 				next ARCH_LOOP;
 			}
