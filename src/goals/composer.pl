@@ -25,8 +25,7 @@ php `which composer` update -v --working-dir "$path/" \\
 	|| { echo "Failed to run composer install command: $path/"; exit 1; }
 popd
 EOF
-		debug ("COMMAND:\n$cmd");
-		system ($cmd) and error ("Failed to run composer update!");
+		run_command ($cmd);
 		# run phpunit if available
 		if ( -f "$path/vendor/bin/phpunit" ) {
 			my $cmd = <<EOF;
@@ -39,8 +38,7 @@ php "$path/vendor/bin/phpunit" \\
 		|| { echo "Failed to run composer install command: $path/"; exit 1; }
 popd
 EOF
-			debug ("COMMAND:\n$cmd");
-			system ($cmd) and error ("Failed to run composer install!");
+			run_command ($cmd);
 		}
 	}
 }

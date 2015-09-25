@@ -79,12 +79,10 @@ sub goal_rpm_build {
 		# download source file
 		if ( $SOURCE_PATH =~ m/^(http|https):\/\/.*/ ) {
 			debug ("Downloading source file: $SOURCE_FILE  from: $SOURCE_PATH");
-			my $cmd = "wget -O \"$PWD/$BUILD_ROOT/SOURCES/$SOURCE_FILE\" \"$SOURCE_PATH\" ".
-				"|| { echo \"Failed to download source file!\"; exit 1; }";
-			debug ("Running command: $cmd");
-			print "\n";
-			system ($cmd) and error ("Failed!!!");
-			print "\n";
+			run_command (
+				"wget -O \"$PWD/$BUILD_ROOT/SOURCES/$SOURCE_FILE\" \"$SOURCE_PATH\" ".
+				"|| { echo \"Failed to download source file!\"; exit 1; }"
+			);
 		# copy local source file
 		} else {
 			if ( ! -f "$PWD/$SOURCE_PATH" ) {
@@ -109,11 +107,10 @@ rpmbuild -bb \\
 		|| exit 1
 EOF
 		# run rpmbuild command
-		debug ("COMMAND:\n$cmd");
-		print "\n\n";
-		system ($cmd) and error ("Failed to build rpm!");
-		print "\n\nResults: ";
-		system ("ls -l $PWD/target/");
+		run_command ($cmd);
+		print "Results: ";
+		system ("ls -l $PWD/$BUILD_TARGET/");
+		print "\n";
 	}
 }
 

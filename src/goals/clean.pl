@@ -10,11 +10,11 @@ sub goal_clean {
 		my $path = "$PWD/$dir/";
 		if ( length($path) > 0 && -d "$path" ) {
 			debug ("Deleting path: $path");
-			my $cmd = "[ -z \"$path\" ] ".
+			run_command (
+				"[ -z \"$path\" ] ".
 				"|| rm -Rf --preserve-root \"$path\" ".
-				"|| exit 1";
-			debug ("COMMAND:\n$cmd");
-			system ($cmd) and error ("Failed to delete path: $path");
+				"|| exit 1"
+			);
 		}
 	}
 }

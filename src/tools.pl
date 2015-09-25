@@ -69,6 +69,24 @@ sub find_file_in_parents {
 
 
 
+sub run_command {
+	my $cmd = shift;
+	if (length($cmd) == 0) {
+		error ("No command argument provided!");
+		exit 1;
+	}
+	if ($main::testing == 0) {
+		debug ("COMMAND:\n$cmd");
+		print "\n";
+		system ($cmd) and error ("Failed to run command!");
+		print "\n";
+	} else {
+		debug ("COMMAND SKIPPED:\n$cmd");
+	}
+}
+
+
+
 sub split_comma {
 	my $data = shift;
 	if (! defined $data || length($data) == 0) {
