@@ -49,6 +49,7 @@ if (length($PWD) == 0) {
 }
 our $project_config_file  = 'xBuild.json';
 our $global_default_goals = 'clean';
+our $deploy_config_file   = 'xDeploy.json';
 my  $SCRIPT_PATH      = "/usr/bin/xBuild";
 my  $GOAL_SCRIPT_PATH = "$SCRIPT_PATH/goals";
 
@@ -61,13 +62,16 @@ require "$SCRIPT_PATH/tools.pl";
 
 
 our $debug = 0;
+
 our $config;
+our $deploy;
 
 our $project_name    = "";
 our $project_version = "";
 our $project_build_number = 'x';
-our @goals = ();
-our @project_default_goals;
+
+our @goals_main  = ();
+our @goals_build = ();
 our @project_version_files;
 
 
@@ -129,7 +133,7 @@ while (my $arg = shift(@ARGV)) {
 		next ARGS_LOOP;
 	} # /IS_FLAG
 	# anything else should be a goal name
-	push (@goals, $arg);
+	push (@goals_main, $arg);
 } # /ARGS_LOOP
 if ($debug   != 0) {
 	debug ("Debug mode enabled");
@@ -141,11 +145,38 @@ debug ();
 
 
 
+##################################################
+### load config files
 
 
 
-# load xbuild.json config
-$config = load_xbuild_json();
+# load xBuild.json
+{
+	my $data = load_file_contents ($project_config_file);
+	if (! defined $data || length($data) == 0) {
+		error ("File not found or failed to load: $project_config_file");
+		exit 1;
+	}
+	$config = JSON->new->utf8->decode($data);
+	debug ();
+}
+# load xDeploy.json
+{
+	debug ("Looking for deploy config: ${main::deploy_config_file}");
+	my $found = find_file_in_parents ($main::deploy_config_file, '', 1);
+	if (length($found) == 0) {
+		debug ("File not found: ${main::deploy_config_file}");
+	} else {
+		debug ("Loading file: $found");
+		my $data = load_file_contents ("$PWD/$found");
+		if (defined $data && length($data) > 0) {
+			$deploy = JSON->new->utf8->decode($data);
+		}
+	}
+	debug ();
+}
+
+
 
 # project name
 $project_name = $config->{Name};
@@ -153,17 +184,55 @@ $project_name = $config->{Name};
 # project version
 $project_version = $config->{Version};
 
-# default goals
-{
-	my $default_goals = $config->{'Default Goals'};
-	if (!defined $default_goals || length($default_goals) == 0) {
-		$default_goals = $global_default_goals;
+
+
+##################################################
+### default goals
+
+
+
+### main goals
+# from xDeploy.json
+if ( (0+@goals_main) == 0 ) {
+	if (defined $deploy && exists $deploy->{'Default Goals'}) {
+		my $data = $deploy->{'Default Goals'};
+		@goals_main = split_comma ($data);
 	}
-	@project_default_goals = split / /, $default_goals;
 }
-if ( (0+@goals) == 0 ) {
-	@goals = @project_default_goals;
+# last resort defaults
+if ( (0+@goals_main) == 0 ) {
+	@goals_main = split_comma ("build");
 }
+if ( (0+@goals_main) == 0 ) {
+	error ("Failed to find main goals to perform!");
+	exit 1;
+}
+
+
+
+### build goals
+# from xBuild.json
+if ( (0+@goals_build) == 0 ) {
+	if (exists $config->{'Build Goals'}) {
+		my $data = $config->{'Build Goals'};
+		@goals_build = split_comma ($data);
+	}
+}
+# last resort defaults
+if ( (0+@goals_build) == 0 ) {
+	@goals_build = split_comma ("clean");
+}
+if ( (0+@goals_build) == 0 ) {
+	error ("Failed to find build goals to perform!");
+	exit 1;
+}
+
+
+
+##################################################
+### perform goals
+
+
 
 require "$GOAL_SCRIPT_PATH/clean.pl";
 require "$GOAL_SCRIPT_PATH/composer.pl";
@@ -179,28 +248,54 @@ $project_version = parse_version_from_files(@project_version_files);
 
 
 
-##################################################
-
-
-
 # display info
 big_title ("Project: $project_name\nVersion: $project_version $project_build_number");
-print " Default Goals:    "; print join ", ", @project_default_goals; print "\n";
-print " Performing Goals: "; print join ", ", @goals; print "\n";
+print " Goals: "; print join ", ", @goals_main; print "\n";
+print " Build: "; print join ", ", @goals_build; print "\n";
 
 
 
-# perform goals
 my $project_title = "$project_name $project_version $project_build_number";
-for my $goal (@goals) {
-	small_title ("$project_title\nGoal: $goal");
-	if(! exists $config->{Goals}->{$goal}) {
-		error ("Goal '$goal' not configured in $project_config_file project config!");
-		exit 1;
+if (0+@goals_main == 0) {
+	error ("No main goals to perform..\n");
+	exit 1;
+}
+for my $goal (@goals_main) {
+	perform_goal ($goal);
+}
+
+
+
+our $last_goal = "";
+sub perform_goal {
+	my $goal = shift;
+#	small_title ("$project_title\nGoal: $goal");
+	small_title ("Goal: $goal");
+	# goal already ran
+	if (defined $last_goal && length($last_goal) > 0) {
+		if ($goal eq $last_goal) {
+			print "\nSkipping goal '$goal' has just run..\n";
+			return;
+		}
 	}
-	my $goal_config = $config->{Goals}->{$goal};
+	my $goal_config;
+	if(exists $config->{Goals}->{$goal}) {
+		$goal_config = $config->{Goals}->{$goal};
+	}
 	# find goal to run
+	GOAL_SWITCH:
 	switch ($goal) {
+		case 'build' {
+			if (0+@goals_build == 0) {
+				error ("No build goals to perform..\n");
+				exit 1;
+			}
+			print " Build Goals: "; print join ", ", @goals_build; print "\n";
+			for my $goal (@goals_build) {
+				perform_goal ($goal);
+			}
+			return;
+		}
 		case 'clean' {
 			goal_clean ($goal_config);
 		}
@@ -232,6 +327,7 @@ for my $goal (@goals) {
 			error ("Unknown goal: $goal");
 		}
 	} # /GOAL_SWITCH
+	$last_goal = $goal;
 }
 
 
@@ -245,23 +341,6 @@ exit 0;
 
 
 
-# load xbuild.json config
-sub load_xbuild_json {
-	debug ("Loading config file: $project_config_file");
-	open (FILE, '<:encoding(UTF-8)', $project_config_file)
-		or error ("Unable to open file: $project_config_file");
-	my $data = "";
-	while (my $line = <FILE>) {
-		chomp $line;
-		$data .= "$line\n";
-	}
-	if (length($data) == 0) {
-		error ("Config file $project_config_file is empty!");
-		exit 1;
-	}
-	my $json = JSON->new->utf8->decode($data);
-	return $json;
-}
 
 
 

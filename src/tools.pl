@@ -35,6 +35,40 @@ sub bin_file_exists {
 
 
 
+sub find_file_in_parents {
+	my $find = shift;
+	my $path = shift;
+	my $deep = shift;
+	if (! defined $deep) {
+		$deep = 0;
+	} elsif ($deep < 0) {
+		return "";
+	}
+	if (! defined $path || length($path) == 0 || $path eq $main::PWD) {
+		$path = '.';
+	}
+	debug ("Checking dir: $path");
+	opendir (DIR, $path) or die $!;
+	FILE_LOOP:
+	while (my $file = readdir(DIR)) {
+		if (length($file) == 0) {
+			next FILE_LOOP;
+		}
+		if ($file eq '.' || $file eq '..') {
+			next FILE_LOOP;
+		}
+		if ($file eq $find) {
+			debug ("Found file: $path / $file");
+			closedir (DIR);
+			return "$path/$file";
+		}
+	}
+	closedir (DIR);
+	return find_file_in_parents ($find, "$path/..", --$deep);
+}
+
+
+
 sub split_comma {
 	my $data = shift;
 	if (! defined $data || length($data) == 0) {
