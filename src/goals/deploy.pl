@@ -3,10 +3,6 @@ use warnings;
 
 
 
-our $DEPLOY_JSON_FILE = "deploy.json";
-
-
-
 sub goal_deploy {
 	print "Deploying packages..\n";
 	my $goal_config = shift;

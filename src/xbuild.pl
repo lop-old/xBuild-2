@@ -42,18 +42,12 @@ use Data::Dumper;
 
 
 
-our $PWD = getcwd;
-if (length($PWD) == 0) {
-	print "Failed to get current working directory!";
-	exit 1;
-}
 our $project_config_file  = 'xBuild.json';
 our $deploy_config_file   = 'xDeploy.json';
 my  $SCRIPT_PATH      = "/usr/bin/xBuild";
 my  $GOAL_SCRIPT_PATH = "$SCRIPT_PATH/goals";
 
 our $DEPLOY_SEARCH_DEEP = 2;
-require "$SCRIPT_PATH/tools.pl";
 
 
 
@@ -74,6 +68,14 @@ our $project_build_number = 'x';
 our @goals_main  = ();
 our @goals_build = ();
 our @project_version_files;
+
+our $PWD = getcwd;
+if (length($PWD) == 0) {
+	print "Failed to get current working directory!";
+	exit 1;
+}
+
+require "$SCRIPT_PATH/tools.pl";
 
 
 
