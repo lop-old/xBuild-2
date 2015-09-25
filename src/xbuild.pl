@@ -42,6 +42,11 @@ use Data::Dumper;
 
 
 
+our $PWD = getcwd;
+if (length($PWD) == 0) {
+	print "Failed to get current working directory!";
+	exit 1;
+}
 our $project_config_file  = 'xBuild.json';
 our $global_default_goals = 'clean';
 my  $SCRIPT_PATH      = "/usr/bin/xBuild";

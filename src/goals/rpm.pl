@@ -35,7 +35,7 @@ sub goal_rpm {
 sub goal_rpm_build {
 	my $goal_config = shift;
 	my $RPM_ARCH    = shift;
-	my $PWD = getcwd;
+	my $PWD = $main::PWD;
 	my $RPM_SPEC   = "${main::project_name}.spec";
 	my $BUILD_ROOT = "rpmbuild-root";
 	my $RPM_SOURCE = "$PWD";

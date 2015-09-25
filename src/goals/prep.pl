@@ -16,7 +16,6 @@ sub goal_prep {
 sub goal_prep_gen_gitignore {
 	my $goal_config = shift;
 	my $filename = '.gitignore';
-	my $PWD = getcwd;
 	my $data = <<EOF;
 **/.project
 **/.classpath
@@ -63,6 +62,7 @@ EOF
 		}
 	}
 	if ($main::testing == 0) {
+		my $PWD = $main::PWD;
 		print "Creating file: .gitignore\n";
 		open (my $FILE, '>', "$PWD/$filename") or error ("Failed to write to file: $filename");
 		print $FILE "#  Auto Generated File\n";
@@ -77,6 +77,7 @@ EOF
 
 
 #sub goal_prep_composer {
+#	my $PWD = $main::PWD;
 #	# update composer
 #	if ( -f "$PWD/composer.json" ) {
 #		my $cmd = "composer self-update || { echo \"Failed to update composer!\"; exit 1; }";
@@ -85,7 +86,7 @@ EOF
 
 #	# composer install
 #	{
-#		my $path = "$PWD";
+#		my $path = $PWD;
 #		print "Composer update: $path\n";
 #		my $cmd = <<EOF;
 #pushd "$path" && \\

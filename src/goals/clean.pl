@@ -5,9 +5,9 @@ use warnings;
 
 sub goal_clean {
 	print "Cleaning..\n";
-	my $pwd = getcwd;
+	my $PWD = $main::PWD;
 	foreach my $dir ( 'target', 'rpmbuild-root', 'build', 'bin', 'out' ) {
-		my $path = "$pwd/$dir/";
+		my $path = "$PWD/$dir/";
 		if ( length($path) > 0 && -d "$path" ) {
 			debug ("Deleting path: $path");
 			my $cmd = "[ -z \"$path\" ] ".

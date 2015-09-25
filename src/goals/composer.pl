@@ -10,12 +10,7 @@ error ("Sorry, this goal is unfinished!");
 	bin_file_exists ("php");
 	bin_file_exists ("composer");
 
-	my $pwd = getcwd;
-	my $path = "$pwd";
-	if ( ! -d "$path/" ) {
-		error ("Composer workspace not found: $path/");
-		exit 1;
-	}
+	my $path = $main::PWD;
 	if ( ! -f "$path/composer.json" ) {
 		error ("composer.json file not found: $path/");
 		exit 1;
@@ -23,7 +18,6 @@ error ("Sorry, this goal is unfinished!");
 
 	# composer install
 	{
-		my $path = "$pwd";
 		print "Composer update: $path\n";
 		my $cmd = <<EOF;
 pushd "$path" && \\
