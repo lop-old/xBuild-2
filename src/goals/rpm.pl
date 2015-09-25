@@ -66,9 +66,11 @@ sub goal_rpm_build {
 		}
 	}
 	# copy .spec file to rpmbuild-root/SPECS/
-	copy ( "$PWD/$RPM_SPEC", "$PWD/$BUILD_ROOT/SPECS/" ) or error ("Failed to copy .spec file!");
+	if ($main::testing == 0) {
+		copy ( "$PWD/$RPM_SPEC", "$PWD/$BUILD_ROOT/SPECS/" ) or error ("Failed to copy .spec file!");
+	}
 	# get source file
-	if (length($SOURCE_PATH) > 0) {
+	if ($main::testing == 0 && length($SOURCE_PATH) > 0) {
 		($SOURCE_FILE = $SOURCE_PATH) =~ s/.*\///;
 		if (length($SOURCE_FILE) == 0) {
 			error ("File name must be specified in source path: $SOURCE_PATH");

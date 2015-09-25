@@ -61,12 +61,16 @@ EOF
 			}
 			$data .= "$filename\n";
 		}
+	}
+	if ($main::testing == 0) {
 		print "Creating file: .gitignore\n";
 		open (my $FILE, '>', "$PWD/$filename") or error ("Failed to write to file: $filename");
 		print $FILE "#  Auto Generated File\n";
 		print $FILE "# =====================\n\n";
 		print $FILE $data;
 		close $FILE;
+	} else {
+		print "Skipping creating file: .gitignore\n";
 	}
 }
 

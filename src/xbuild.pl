@@ -78,6 +78,9 @@ while (my $arg = shift(@ARGV)) {
 			case '-d' {
 				$arg = '--debug';
 			}
+			case '-t' {
+				$arg = '--test';
+			}
 			case '-h' {
 				$arg = '--help';
 			}
@@ -92,12 +95,16 @@ while (my $arg = shift(@ARGV)) {
 			case '--debug' {
 				$debug = 1;
 			}
+			case '--test' {
+				$testing = 1;
+			}
 			case '--help' {
 				print "Usage: xbuild [-hv] [GOAL]...\n";
 				print "Reads a xbuild.json config file from a project and performs build goals.\n";
 				print "\n";
 				print "  -n, --build-number  set the build number\n";
 				print "\n";
+				print "  -t, --test     read only mode for testing\n";
 				print "  -d, --debug    debug mode, most verbose logging\n";
 				print "\n";
 				print "  -h, --help     display this help and exit\n";
@@ -119,6 +126,13 @@ while (my $arg = shift(@ARGV)) {
 	# anything else should be a goal name
 	push (@goals, $arg);
 } # /ARGS_LOOP
+if ($debug   != 0) {
+	debug ("Debug mode enabled");
+}
+if ($testing != 0) {
+	debug ("Testing mode enabled");
+}
+debug ();
 
 
 
