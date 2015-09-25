@@ -3,8 +3,8 @@
 	"Default Goals": "clean build deploy",
 	"Create Repo Workers": 0,
 	"Paths": {
-		"Downloads":   "/home/pxn/www/dl/",
-		"Yum Testing": "/home/pxn/www/yum/extras-testing",
-		"Yum Stable":  "/home/pxn/www/yum/extras-stable"
+		"Downloads":   "/home/pxn/www/dl/<PROJECT_NAME>",
+		"Yum Testing": "/home/pxn/www/yum/testing",
+		"Yum Stable":  "/home/pxn/www/yum/stable"
 	}
 }
