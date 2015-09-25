@@ -4,6 +4,7 @@ use warnings;
 
 
 sub goal_composer {
+	print "Building with composer..\n";
 error ("Sorry, this goal is unfinished!");
 	# ensure tools are available
 	bin_file_exists ("php");
@@ -26,8 +27,8 @@ error ("Sorry, this goal is unfinished!");
 		print "Composer update: $path\n";
 		my $cmd = <<EOF;
 pushd "$path" && \\
-php `which composer` update -v --working-dir "$path/" || \\
-{ echo "Failed to run composer install command: $path/"; exit 1; }
+php `which composer` update -v --working-dir "$path/" \\
+	|| { echo "Failed to run composer install command: $path/"; exit 1; }
 popd
 EOF
 		debug ("COMMAND:\n$cmd");
@@ -40,15 +41,14 @@ php "$path/vendor/bin/phpunit" \\
 	--coverage-html="$path/coverage/html/" \\
 	--coverage-php="$path/coverage/coverage.php/" \\
 	--coverage-text="$path/coverage/coverage.txt" \\
-	--coverage-xml="$path/coverage/xml/" || \\
-{ echo "Failed to run composer install command: $path/"; exit 1; }
+	--coverage-xml="$path/coverage/xml/" \\
+		|| { echo "Failed to run composer install command: $path/"; exit 1; }
 popd
 EOF
 			debug ("COMMAND:\n$cmd");
 			system ($cmd) and error ("Failed to run composer install!");
 		}
 	}
-
 }
 
 

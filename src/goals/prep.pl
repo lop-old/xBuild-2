@@ -4,6 +4,7 @@ use warnings;
 
 
 sub goal_prep {
+	print "Prep workspace..\n";
 	my $goal_config = shift;
 	goal_prep_gen_gitignore ($goal_config);
 #	goal_prep_composer      ($goal_config);
@@ -75,7 +76,7 @@ EOF
 #	# update composer
 #	if ( -f "$PWD/composer.json" ) {
 #		my $cmd = "composer self-update || { echo \"Failed to update composer!\"; exit 1; }";
-#		system $cmd;
+#		system ($cmd) and error ("Command failed! $cmd");
 #	}
 
 #	# composer install
@@ -89,7 +90,7 @@ EOF
 #popd
 #EOF
 #		debug ("COMMAND:\n$cmd");
-#		system $cmd;
+#		system ($cmd) and error ("Command failed! $cmd");
 #	}
 #}
 

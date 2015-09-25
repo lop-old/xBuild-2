@@ -4,7 +4,7 @@ use warnings;
 
 
 sub goal_version {
-print "Updating version..\n";
+	print "Updating version..\n";
 error ("Sorry, this goal is unfinished!");
 }
 

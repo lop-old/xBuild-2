@@ -10,6 +10,8 @@
 ## Download the original from:
 ##   http://dl.poixson.com/shellscripts/
 ##
+## Required packages: perl-JSON perl-Switch
+##
 ## Permission to use, copy, modify, and/or distribute this software for any
 ## purpose with or without fee is hereby granted, provided that the above
 ## copyright notice and this permission notice appear in all copies.
@@ -164,17 +166,14 @@ $project_version = parse_version_from_files(@project_version_files);
 
 
 # display info
-big_title ("Project: $project_name\nVersion: $project_version");
-#print " Name:    $project_name\n";
-#print " Version: $project_version\n";
-#print "\n";
+big_title ("Project: $project_name\nVersion: $project_version $project_build_number");
 print " Default Goals:    "; print join ", ", @project_default_goals; print "\n";
 print " Performing Goals: "; print join ", ", @goals; print "\n";
 
 
 
 # perform goals
-my $project_title = "$project_name $project_version";
+my $project_title = "$project_name $project_version $project_build_number";
 for my $goal (@goals) {
 	small_title ("$project_title\nGoal: $goal");
 	if(! exists $config->{Goals}->{$goal}) {
@@ -187,8 +186,11 @@ for my $goal (@goals) {
 		case 'clean' {
 			goal_clean ($goal_config);
 		}
-		case 'prep' {
-			goal_prep ($goal_config);
+		case 'composer' {
+			goal_composer ($goal_config);
+		}
+		case 'deploy' {
+			goal_deploy ($goal_config);
 		}
 		case 'gradle' {
 			goal_gradle ($goal_config);
@@ -196,14 +198,14 @@ for my $goal (@goals) {
 		case 'maven' {
 			goal_maven ($goal_config);
 		}
-		case 'gradle' {
-			goal_gradle ($goal_config);
+		case 'prep' {
+			goal_prep ($goal_config);
 		}
 		case 'rpm' {
 			goal_rpm ($goal_config);
 		}
-		case 'composer' {
-			goal_composer ($goal_config);
+		case 'version' {
+			goal_version ($goal_config);
 		}
 		else {
 			error ("Unknown goal: $goal");
