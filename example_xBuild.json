@@ -14,7 +14,9 @@
 		"clean": {
 		},
 		"rpm": {
-			"Arch": "noarch"
+			"Arch": "noarch, i386, x86_64",
+			"Source": "http://example.com/project_source.zip",
+			"Source": "project_source.zip"
 		},
 		"deploy": {
 			"Files": [
