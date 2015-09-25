@@ -39,6 +39,7 @@ sub goal_rpm_build {
 	my $RPM_SPEC   = "${main::project_name}.spec";
 	my $BUILD_ROOT = "rpmbuild-root";
 	my $RPM_SOURCE = "$PWD";
+	my $BUILD_TARGET = "target";
 	my $BUILD_NUMBER = $main::project_build_number;
 	if ($BUILD_NUMBER ne 'x' || length($BUILD_NUMBER) == 0) {
 		$BUILD_NUMBER = int ($main::project_build_number);
@@ -58,6 +59,10 @@ sub goal_rpm_build {
 	if ( ! -d "$PWD/$BUILD_ROOT/" ) {
 		debug ("Creating directory: $BUILD_ROOT/");
 		mkdir "$PWD/$BUILD_ROOT/";
+	}
+	if ( ! -d "$PWD/$BUILD_TARGET/" ) {
+		debug ("Creating directory: $BUILD_TARGET/");
+		mkdir "$PWD/$BUILD_TARGET/";
 	}
 	foreach my $dir ( 'BUILD', 'BUILDROOT', 'RPMS', 'SOURCE', 'SOURCES', 'SPECS', 'SRPMS', 'tmp' ) {
 		if ( ! -d "$PWD/$BUILD_ROOT/$dir/" ) {
@@ -101,7 +106,7 @@ rpmbuild -bb \\
 	--define="_topdir $PWD/$BUILD_ROOT/" \\
 	--define="_tmppath $PWD/$BUILD_ROOT/tmp/" \\
 	--define="SOURCE_ROOT $RPM_SOURCE/" \\
-	--define="_rpmdir $PWD/target/" \\
+	--define="_rpmdir $PWD/$BUILD_TARGET/" \\
 	--define="BUILD_NUMBER $BUILD_NUMBER" \\
 	"$PWD/$BUILD_ROOT/SPECS/$RPM_SPEC" \\
 		|| exit 1
