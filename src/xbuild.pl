@@ -265,12 +265,20 @@ $project_version = parse_version_from_files(@project_version_files);
 
 # display info
 big_title ("Project: $project_name\nVersion: $project_version $project_build_number");
-print " Goals: "; print join ", ", @goals_main; print "\n";
-print " Build: "; print join ", ", @goals_build; print "\n";
-
-
-
+if ($project_build_number eq 'x') {
+	print " Build Number: <Not Set>\n";
+} else {
+	print " Build Number: $project_build_number\n";
+}
 print " User: $USER\n";
+print "\n";
+{
+	my $goals_str = join ", ", @goals_main;
+	print " Goals: "; print $goals_str; print "\n";
+	if (", $goals_str, " =~ /\sbuild,\s/ ) {
+		print " Build: "; print join ", ", @goals_build; print "\n";
+	}
+}
 my $project_title = "$project_name $project_version $project_build_number";
 if (0+@goals_main == 0) {
 	error ("No main goals to perform..\n");
