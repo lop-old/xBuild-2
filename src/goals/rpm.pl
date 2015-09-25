@@ -51,7 +51,7 @@ rpmbuild -bb \\
 		|| exit 1
 EOF
 		debug ("COMMAND:\n$cmd");
-		system $cmd;
+		system ($cmd) and error ("Failed to build rpm!");
 	}
 }
 

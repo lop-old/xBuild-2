@@ -8,9 +8,13 @@ sub goal_clean {
 	my $pwd = getcwd;
 	foreach my $dir ( 'target', 'rpmbuild-root', 'build', 'bin', 'out' ) {
 		my $path = "$pwd/$dir/";
-		if ( -d "$path" ) {
-			debug ("deleting path: $path");
-			system ("[ -z \"$path\" ] || rm -Rf --preserve-root \"$path\" || exit 1");
+		if ( length($path) > 0 && -d "$path" ) {
+			debug ("Deleting path: $path");
+			my $cmd = "[ -z \"$path\" ] ".
+				"|| rm -Rf --preserve-root \"$path\" ".
+				"|| exit 1";
+			debug ("COMMAND:\n$cmd");
+			system ($cmd) and error ("Failed to delete path: $path");
 		}
 	}
 }
