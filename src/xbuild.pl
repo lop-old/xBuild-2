@@ -48,7 +48,6 @@ if (length($PWD) == 0) {
 	exit 1;
 }
 our $project_config_file  = 'xBuild.json';
-our $global_default_goals = 'clean';
 our $deploy_config_file   = 'xDeploy.json';
 my  $SCRIPT_PATH      = "/usr/bin/xBuild";
 my  $GOAL_SCRIPT_PATH = "$SCRIPT_PATH/goals";
@@ -61,7 +60,8 @@ require "$SCRIPT_PATH/tools.pl";
 
 
 
-our $debug = 0;
+our $debug   = 0;
+our $testing = 0;
 
 our $config;
 our $deploy;
@@ -242,6 +242,8 @@ require "$GOAL_SCRIPT_PATH/maven.pl";
 require "$GOAL_SCRIPT_PATH/prep.pl";
 require "$GOAL_SCRIPT_PATH/rpm.pl";
 
+
+
 # version files
 @project_version_files = @{$config->{'Version Files'}};
 $project_version = parse_version_from_files(@project_version_files);
@@ -341,9 +343,6 @@ exit 0;
 
 
 
-
-
-
 # auto detect project version
 sub parse_version_from_files {
 	my @files = shift;
@@ -411,3 +410,4 @@ sub parse_version_file {
 
 
 
+1;

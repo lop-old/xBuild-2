@@ -1,7 +1,7 @@
 {
 	"Name": "ProjectName",
 	"Version": "1.0.0",
-	"Default Goals": "clean rpm [deploy]",
+	"Build Goals": "clean gradle rpm",
 	"Version Files": [
 		"xBuild.spec"
 	],

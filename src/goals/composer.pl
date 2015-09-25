@@ -4,7 +4,7 @@ use warnings;
 
 
 sub goal_composer {
-	print "Building with composer..\n";
+	print "Running composer..\n";
 error ("Sorry, this goal is unfinished!");
 	# ensure tools are available
 	bin_file_exists ("php");

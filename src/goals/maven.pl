@@ -4,7 +4,7 @@ use warnings;
 
 
 sub goal_maven {
-	print "Building with maven..\n";
+	print "Running maven..\n";
 error ("Sorry, this goal is unfinished!");
 	# ensure tools are available
 	bin_file_exists ("mvn");

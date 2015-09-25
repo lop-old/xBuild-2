@@ -36,10 +36,10 @@ sub goal_rpm_build {
 	my $goal_config = shift;
 	my $RPM_ARCH    = shift;
 	my $PWD = $main::PWD;
-	my $RPM_SPEC   = "${main::project_name}.spec";
-	my $BUILD_ROOT = "rpmbuild-root";
-	my $RPM_SOURCE = "$PWD";
+	my $RPM_SPEC     = "${main::project_name}.spec";
+	my $BUILD_ROOT   = "rpmbuild-root";
 	my $BUILD_TARGET = "target";
+	my $RPM_SOURCE   = "$PWD";
 	my $BUILD_NUMBER = $main::project_build_number;
 	if ($BUILD_NUMBER ne 'x' || length($BUILD_NUMBER) == 0) {
 		$BUILD_NUMBER = int ($main::project_build_number);
