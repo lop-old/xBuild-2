@@ -116,6 +116,14 @@ while (my $arg = shift(@ARGV)) {
 
 
 
+sub bin_file_exists {
+	my $filename = shift;
+	system ("which $filename >/dev/null || { echo \"Composer is not available - yum install rpm-build\"; exit 1; }")
+		and error ("'which' command failed!");
+}
+
+
+
 # load xbuild.json config
 $config = load_xbuild_json();
 

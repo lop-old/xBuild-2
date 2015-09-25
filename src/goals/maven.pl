@@ -7,7 +7,7 @@ sub goal_maven {
 print "Building with maven..\n";
 error ("Sorry, this goal is unfinished!");
 	# ensure tools are available
-	system 'which mvn >/dev/null || { echo "Composer is not available - yum install maven"; exit 1; }';
+	bin_file_exists ("mvn");
 }
 
 

@@ -6,8 +6,8 @@ use warnings;
 sub goal_composer {
 error ("Sorry, this goal is unfinished!");
 	# ensure tools are available
-	system 'which php      >/dev/null || { echo "PHP is not available - yum install php56w"; exit 1; }';
-	system 'which composer >/dev/null || { echo "Composer is not available - yum install php-tools"; exit 1; }';
+	bin_file_exists ("php");
+	bin_file_exists ("composer");
 
 	my $pwd = getcwd;
 	my $path = "$pwd";

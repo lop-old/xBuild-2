@@ -6,7 +6,7 @@ use warnings;
 sub goal_rpm {
 error ("Sorry, this goal is unfinished!");
 	# ensure tools are available
-	system 'which rpmbuild >/dev/null || { echo "Composer is not available - yum install rpm-build"; exit 1; }';
+	bin_file_exists ("rpmbuild");
 	my $PWD = getcwd;
 	my $RPM_SPEC   = "${main::project_name}.spec";
 	my $BUILD_ROOT = "$PWD/rpmbuild-root";
