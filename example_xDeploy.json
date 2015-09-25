@@ -1,0 +1,10 @@
+{
+	"Name": "PoiXson Build Server",
+	"Default Goals": "clean build deploy",
+	"Create Repo Workers": 0,
+	"Paths": {
+		"Downloads":   "/home/pxn/www/dl/",
+		"Yum Testing": "/home/pxn/www/yum/extras-testing",
+		"Yum Stable":  "/home/pxn/www/yum/extras-stable"
+	}
+}
