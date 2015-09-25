@@ -52,6 +52,7 @@ our $deploy_config_file   = 'xDeploy.json';
 my  $SCRIPT_PATH      = "/usr/bin/xBuild";
 my  $GOAL_SCRIPT_PATH = "$SCRIPT_PATH/goals";
 
+our $DEPLOY_SEARCH_DEEP = 2;
 require "$SCRIPT_PATH/tools.pl";
 
 
@@ -163,7 +164,11 @@ debug ();
 # load xDeploy.json
 {
 	debug ("Looking for deploy config: ${main::deploy_config_file}");
-	my $found = find_file_in_parents ($main::deploy_config_file, '', 1);
+	my $found = find_file_in_parents (
+		$main::deploy_config_file,
+		'',
+		$DEPLOY_SEARCH_DEEP
+	);
 	if (length($found) == 0) {
 		debug ("File not found: ${main::deploy_config_file}");
 	} else {

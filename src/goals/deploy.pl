@@ -3,7 +3,6 @@ use warnings;
 
 
 
-our $SEARCH_DEEP = 1;
 our $DEPLOY_JSON_FILE = "deploy.json";
 
 
