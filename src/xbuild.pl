@@ -42,7 +42,7 @@ use Data::Dumper;
 
 our $project_config_file  = 'xBuild.json';
 our $global_default_goals = 'clean';
-
+my $GOAL_SCRIPT_PATH = "/usr/bin/xbuild-goals";
 
 
 ##################################################
@@ -145,16 +145,13 @@ if ( (0+@goals) == 0 ) {
 	@goals = @project_default_goals;
 }
 
-{
-	my $PWD = '/media/gwork/xBuild/src';
-	require "$PWD/goals/clean.pl";
-	require "$PWD/goals/composer.pl";
-	require "$PWD/goals/deploy.pl";
-	require "$PWD/goals/gradle.pl";
-	require "$PWD/goals/maven.pl";
-	require "$PWD/goals/prep.pl";
-	require "$PWD/goals/rpm.pl";
-}
+require "$GOAL_SCRIPT_PATH/clean.pl";
+require "$GOAL_SCRIPT_PATH/composer.pl";
+require "$GOAL_SCRIPT_PATH/deploy.pl";
+require "$GOAL_SCRIPT_PATH/gradle.pl";
+require "$GOAL_SCRIPT_PATH/maven.pl";
+require "$GOAL_SCRIPT_PATH/prep.pl";
+require "$GOAL_SCRIPT_PATH/rpm.pl";
 
 # version files
 @project_version_files = @{$config->{'Version Files'}};
