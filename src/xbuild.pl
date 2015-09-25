@@ -145,6 +145,10 @@ if ($testing != 0) {
 	debug ("Testing mode enabled");
 }
 debug ();
+if ($PWD =~ m/^\/(usr|bin)\/.*/ ) {
+	error ("Sorry, you cannot run this command from within /usr or /bin");
+	exit 1;
+}
 
 
 
