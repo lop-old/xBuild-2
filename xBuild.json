@@ -15,7 +15,7 @@
 		},
 		"deploy": {
 			"Files": [
-				"target/<BUILD_NAME>-<BUILD_VERSION>-1.noarch.rpm"
+				"target/<PROJECT_NAME>-<PROJECT_VERSION>-1.noarch.rpm"
 			]
 		}
 	}
