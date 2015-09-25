@@ -1,7 +1,7 @@
 {
 	"Name": "ProjectName",
 	"Version": "1.0.0",
-	"Default Goals": "clean rpm deploy",
+	"Default Goals": "clean rpm [deploy]",
 	"Version Files": [
 		"xBuild.spec"
 	],

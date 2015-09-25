@@ -190,7 +190,10 @@ for my $goal (@goals) {
 			goal_composer ($goal_config);
 		}
 		case 'deploy' {
-			goal_deploy ($goal_config);
+			goal_deploy ($goal_config, 0);
+		}
+		case '[deploy]' {
+			goal_deploy ($goal_config, 1);
 		}
 		case 'gradle' {
 			goal_gradle ($goal_config);
