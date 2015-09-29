@@ -28,10 +28,19 @@ sub goal_prep_gen_gitignore {
 **/build/
 **/bin/
 **/out/
+**/.gradle/
+**/.settings/
+
+*.project
+*.classpath
+local.properties
 
 *.zip
 *.exe
+*.dll
 *.rpm
+*.apk
+*.so
 *.jar
 *.war
 *.ear
@@ -40,6 +49,7 @@ sub goal_prep_gen_gitignore {
 *.idea
 *.lock
 *.out
+*.db
 
 *.swp
 .*.swp
