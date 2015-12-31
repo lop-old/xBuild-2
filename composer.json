@@ -1,0 +1,41 @@
+{
+	"name":        "pxn/xBuildWeb",
+	"description": "xBuild Website GUI",
+	"version":     "0.1.0",
+	"type":        "project",
+	"homepage":    "http://poixson.com/",
+	"license":     "GPL-3",
+	"support": {
+		"issues": "https://github.com/PoiXson/xBuild/issues",
+		"source": "https://github.com/PoiXson/xBuild",
+		"irc":    "irc://irc.esper.net/poixson"
+	},
+	"authors": [{
+		"name":  "lorenzop",
+		"role":  "Developer"
+	}],
+	"autoload": {
+		"psr-4": {
+			"gc\\": "src/web"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"pxn\\xBuildWeb\\tests\\":    "tests/web/",
+			"pxn\\xBuildWeb\\examples\\": "examples/web/"
+		}
+	},
+	"archive": {
+		"exclude": [
+			"tests/",
+			"examples/"
+		]
+	},
+	"require": {
+		"php":          "5.6.*",
+		"pxn/phpUtils": "0.1.*"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "5.0.*"
+	}
+}
