@@ -12,6 +12,7 @@
 **/build/
 **/bin/
 **/out/
+**/vendor/
 
 *.zip
 *.exe
