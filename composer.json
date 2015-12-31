@@ -16,13 +16,13 @@
 	}],
 	"autoload": {
 		"psr-4": {
-			"gc\\": "src/web"
+			"pxn\\xBuild\\web\\": "src/web/private"
 		}
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"pxn\\xBuildWeb\\tests\\":    "tests/web/",
-			"pxn\\xBuildWeb\\examples\\": "examples/web/"
+			"pxn\\xBuild\\tests\\":    "tests/web/",
+			"pxn\\xBuild\\examples\\": "examples/web/"
 		}
 	},
 	"archive": {
