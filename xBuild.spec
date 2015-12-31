@@ -54,7 +54,7 @@ for file in \
 	xbuild.pl \
 ; do
 	%{__install} -m 0555 \
-		"%{SOURCE_ROOT}/src/${file}" \
+		"%{SOURCE_ROOT}/src/perl/${file}" \
 		"${RPM_BUILD_ROOT}%{prefix}/${file}" \
 			|| exit 1
 done
