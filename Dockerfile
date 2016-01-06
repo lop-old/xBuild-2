@@ -13,8 +13,10 @@ RUN yum install -y nginx18
 RUN yum install -y php56w php56w-cli php56w-fpm php56w-xml php56w-gd
 RUN yum clean all
 
-#COPY xbuild-setup.service /etc/systemd/system/xbuild-setup.service
-ENTRYPOINT cat /etc/redhat-release
+RUN echo 'daemon off;' >> /etc/nginx/nginx.conf
+COPY ./src/etc/supervisord.conf        /etc/supervisord.conf
+COPY ./src/etc/supervisord.d/nginx.ini   /etc/supervisord.d/nginx.ini
+COPY ./src/etc/supervisord.d/php-fpm.ini /etc/supervisord.d/php-fpm.ini
 
 EXPOSE 80/tcp
-
+ENTRYPOINT /usr/bin/supervisord -c /etc/supervisord.conf
