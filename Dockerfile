@@ -1,4 +1,4 @@
-FROM poixson/centos:7.2.1511
+FROM centos:7
 MAINTAINER LorenzoP <lorenzo@poixson.com>
 
 RUN yum update -y
